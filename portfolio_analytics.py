@@ -10,6 +10,8 @@ import scipy.stats as spstats
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 
+#%matplotlib inline
+
 pd.set_option('display.notebook_repr_html', False)
 pd.set_option('display.max_columns', 7)
 pd.set_option('display.max_rows', 10)
@@ -103,6 +105,13 @@ def calc_efficient_frontier(returns):
         result_weights.append(np.round(results.x, 5))
     return {'Means':result_means, 'Stds':result_stds, 'Weights':result_weights}
 
+def plot_efficient_frontier(ef_data):
+    plt.figure(figsize=(12,8))
+    plt.title('Efficient Frontier')
+    plt.xlabel('Sandard Deviation of the portfolio (Risk)')
+    plt.ylabel('Return of the portfolio')
+    plt.plot(ef_data['Stds'], ef_data['Means'], '--')
+    plt.show()
 
 def y_f(x):
     return 2+x**2
@@ -118,4 +127,8 @@ if __name__ == '__main__':
     optimized_result = optimize_portfolio(annual_returns, 0.0003)
     print(optimized_result)
 
+    frontier_data = calc_efficient_frontier(annual_returns)
+    print(frontier_data)
+
+    plot_efficient_frontier(frontier_data)
 
