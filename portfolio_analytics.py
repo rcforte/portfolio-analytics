@@ -137,13 +137,13 @@ def calc_efficient_frontier(returns):
         bounds = [(0,1) for i in np.arange(nstocks)]
         constraints = ({'type':'eq', 'fun':lambda W: np.sum(W)-1})
         results = scopt.minimize(
-                objfun,
-                weights,
-                (returns,r),
-                method='SLSQP',
-                constraints=constraints,
-                bounds=bounds
-                )
+            objfun,
+            weights,
+            (returns,r),
+            method='SLSQP',
+            constraints=constraints,
+            bounds=bounds
+        )
         if not results.success:
             raise Exception(result.message)
         result_means.append(np.round(r,4))
@@ -170,9 +170,11 @@ if __name__ == '__main__':
     closes = get_historical_closes(['MSFT','AAPL','KO'], '2010-01-01', '2014-12-31')
     daily_returns = calc_daily_returns(closes)
     annual_returns = calc_annual_returns(daily_returns)
+
     portfolio_var = calc_portfolio_var(annual_returns)
     print(np.sqrt(portfolio_var))
     sr = sharpe_ratio(annual_returns)
+
     optimized_result = optimize_portfolio(annual_returns, 0.0003)
     frontier_data = calc_efficient_frontier(annual_returns)
     plot_efficient_frontier(frontier_data)
